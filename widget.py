@@ -28,18 +28,20 @@ def mask_account_card(account_card: str) -> str:
         raise ValueError("Неправильные данные карты или счета")
 
 
-def get_date(date_str: str, format="%d.%m.%Y") -> str:
+def get_date(date_str: str, format: object = "%d.%m.%Y") -> str:
     """Функция get_date, которая принимает на вход строку с датой в формате
     "2024-03-11T02:26:18.671407" и возвращает строку с датой в формате "ДД.ММ.ГГГГ" ("11.03.2024")."""
-    date_string = date_str[0:10]
-    date_str_split = date_string.split("-")
-    new_date = ".".join(date_str_split[::-1])
-    new_date_time = datetime.strptime(new_date, "%d.%m.%Y")
-    if format:
-        date_object = new_date_time.strftime(format)
-        return date_object
-    else:
-        raise ValueError("Неправильный формат даты")
+    if date_str:
+        if format:
+            date_string = date_str[0:10]
+            date_str_split = date_string.split("-")
+            new_date = ".".join(date_str_split[::-1])
+            new_date_time = datetime.strptime(new_date, "%d.%m.%Y")
+            date_object = new_date_time.strftime(format)
+            return date_object
+        else:
+            raise TypeError("Неправильный формат даты")
+    raise ValueError("Введите правильную строку с датой")
 
 
 print(mask_account_card("Visa Platinum 7000792289606361"))
