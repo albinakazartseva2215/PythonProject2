@@ -1,3 +1,4 @@
+import typing
 def filter_by_state(data_list: list[dict], state="EXECUTED") -> list[dict]:
     """Функция filter_by_state принимает список словарей и опционально значение для ключа state
     и возвращает новый список словарей, содержащий только те словари,
@@ -33,7 +34,7 @@ print(
                 "date": "2018-10-14T08:21:33.419441",
             },
         ],
-        "CANCELED",
+        "EXECUTED",
     )
 )
 
