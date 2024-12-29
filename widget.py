@@ -1,5 +1,6 @@
 import typing
-from masks import get_mask_account, get_mask_card_number
+from datetime import datetime
+from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(account_card: str) -> str:
@@ -17,20 +18,29 @@ def mask_account_card(account_card: str) -> str:
     type_card = "".join(type_)
     digit_card = "".join(digit_)
 
-    mask_digit_card = (
-        get_mask_card_number(int(digit_card))
-        if len(digit_card) == 16
-        else get_mask_account(int(digit_card))
-    )
-    return f"{type_card} {mask_digit_card}"
+    if len(digit_card) == 16:
+        mask_digit_card = (get_mask_card_number(int(digit_card)))
+        return f"{type_card} {mask_digit_card}"
+    elif len(digit_card) == 20:
+        mask_digit_card = (get_mask_account(int(digit_card)))
+        return f"{type_card} {mask_digit_card}"
+    elif len(digit_card) != 16 or len(digit_card) != 20:
+        raise ValueError("Неправильные данные карты или счета")
 
 
-def get_date(date_str: str) -> str:
+def get_date(date_str: str, format="%d.%m.%Y") -> str:
     """Функция get_date, которая принимает на вход строку с датой в формате
-    "2024-03-11T02:26:18.671407" и возвращает строку с датой в формате "ДД.ММ.ГГГГ" ("11.03.2024").
-    """
-    return f"{date_str[8:10]}.{date_str[5:7]}.{date_str[0:4]}"
+    "2024-03-11T02:26:18.671407" и возвращает строку с датой в формате "ДД.ММ.ГГГГ" ("11.03.2024")."""
+    date_string = date_str[0:10]
+    date_str_split = date_string.split("-")
+    new_date = ".".join(date_str_split[::-1])
+    new_date_time = datetime.strptime(new_date, "%d.%m.%Y")
+    if format:
+        date_object = new_date_time.strftime(format)
+        return date_object
+    else:
+        raise ValueError("Неправильный формат даты")
 
 
-print(mask_account_card("Счет 73654108430135874305"))
+print(mask_account_card("Visa Platinum 7000792289606361"))
 print(get_date("2024-03-11T02:26:18.671407"))
